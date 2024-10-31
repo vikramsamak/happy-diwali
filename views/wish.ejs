@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Diwali Fireworks</title>
+    <title>Happy Diwali <%= to %></title>
     <link href="/css/styles.css" rel="stylesheet" />
     <link
       rel="stylesheet"
@@ -105,7 +105,7 @@
         const to = event.target.to.value;
         const whatsappNumber = event.target.whatsapp.value;
 
-        const wishUrl = `http://localhost:3000/wish?from=${encodeURIComponent(
+        const wishUrl = `https://send-diwali-wishes.vercel.app/wish?from=${encodeURIComponent(
           from
         )}&to=${encodeURIComponent(to)}`;
 
