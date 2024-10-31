@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diwali Fireworks</title>
+    <link href="/css/styles.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="/libs/p5.min.js"></script>
+    <script src="/scripts/particle.js"></script>
+    <script src="/scripts/firework.js"></script>
+    <script src="/scripts/sketch.js"></script>
+  </head>
+  <body class="relative text-white min-h-screen overflow-hidden bg-black">
+    <div
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center w-full p-4"
+    >
+      <div class="bg-black bg-opacity-70 rounded-lg p-6">
+        <h1 class="text-5xl font-bold mb-6">Happy Diwali... <%= to %></h1>
+        <p class="text-xl mb-4 text-pretty italic"><%= randomWishMessage %></p>
+        <p class="text-base font-semibold mt-4">From: <%= from %></p>
+      </div>
+    </div>
+
+    <button
+      title="Send Wishes"
+      type="button"
+      id="openModal"
+      class="fixed bottom-10 right-10 p-4 bg-black bg-opacity-80 hover:bg-gray-900 text-white rounded-full shadow-lg transition flex items-center justify-center"
+    >
+      <i class="fa-regular fa-paper-plane h-5 w-5"></i>
+    </button>
+
+    <div
+      id="modal"
+      class="fixed inset-0 bg-black bg-opacity-75 items-center justify-center hidden"
+    >
+      <div class="bg-gray-400 p-6 rounded-lg min-w-[50vw]">
+        <div class="flex justify-end items-center w-full">
+          <button id="closeModal" class="text-gray-700 underline">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="p-4">
+          <h2 class="text-xl font-bold text-white mb-4">Send Wishes</h2>
+          <form class="flex flex-col" onsubmit="sendWish(event)">
+            <input
+              type="text"
+              name="from"
+              placeholder="From (Your Name)"
+              class="mb-2 p-2 rounded border border-gray-300 text-black placeholder:text-black"
+              required
+            />
+            <input
+              type="text"
+              name="to"
+              placeholder="To (Recipient Name)"
+              class="mb-2 p-2 rounded border border-gray-300 text-black placeholder:text-black"
+              required
+            />
+
+            <input
+              type="tel"
+              name="whatsapp"
+              placeholder="WhatsApp Number (e.g., +1234567890)"
+              class="p-2 rounded border border-gray-300 text-black placeholder:text-black"
+              required
+            />
+            <span class="text-xs text-black">Country code required.</span>
+
+            <button
+              type="submit"
+              class="bg-gray-800 text-white hover:bg-gray-600 font-bold py-2 px-4 rounded mt-4"
+            >
+              Send Wishes
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      document
+        .getElementById("openModal")
+        .addEventListener("click", function () {
+          document.getElementById("modal").classList.remove("hidden");
+          document.getElementById("modal").classList.add("flex");
+        });
+
+      document
+        .getElementById("closeModal")
+        .addEventListener("click", function () {
+          document.getElementById("modal").classList.add("hidden");
+        });
+
+      function sendWish(event) {
+        event.preventDefault();
+
+        const from = event.target.from.value;
+        const to = event.target.to.value;
+        const whatsappNumber = event.target.whatsapp.value;
+
+        const wishUrl = `http://localhost:3000/wish?from=${encodeURIComponent(
+          from
+        )}&to=${encodeURIComponent(to)}`;
+
+        const message = `Hi ${to},\n\n${from} has sent you their Diwali wishes! Here's the link: ${wishUrl}`;
+
+        const whatsappUrl = `https://api.whatsapp.com/send?phone=${encodeURIComponent(
+          whatsappNumber
+        )}&text=${encodeURIComponent(message)}`;
+
+        window.open(whatsappUrl, "_blank");
+      }
+    </script>
+  </body>
+</html>
